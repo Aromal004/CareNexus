@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
-class PatientManager(BaseUserManager):
+class UserAccountManager(BaseUserManager):
     def create_user(self, email, name, phone, password=None):
         if not email:
             raise ValueError('Users must have an email address')
@@ -22,14 +22,14 @@ class PatientManager(BaseUserManager):
 
         return user
 
-class Patient(AbstractBaseUser, PermissionsMixin):
+class UserAccount(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
     phone = models.CharField(max_length=15)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-    objects = PatientManager()
+    objects = UserAccountManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'phone']
