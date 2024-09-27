@@ -10,12 +10,13 @@ function Register() {
     <Container>
       <Content>
         <h1>Register</h1>
-        <InputField icon={<FaUser fontSize="18px" />} type="text" placeholder="Name" />
-        <InputField icon={<SiGmail fontSize="18px" />} type="email" placeholder="Email" />
-        <InputField icon={<FaPhone  fontSize="18px" />} type="text" placeholder="Phone" />
-        <InputField icon={<FaLock fontSize="18px" />} type="password" placeholder="Password" />
-        <InputField icon={<FaLock fontSize="18px" />} type="password" placeholder="Confirm Password" />
-        
+        <Group>
+          <InputField icon={<FaUser fontSize="18px" />} type="text" placeholder="Name" />
+          <InputField icon={<SiGmail fontSize="18px" />} type="email" placeholder="Email" />
+          <InputField icon={<FaPhone  fontSize="18px" />} type="text" placeholder="Phone" />
+          <InputField icon={<FaLock fontSize="18px" />} type="password" placeholder="Password" />
+          <InputField icon={<FaLock fontSize="18px" />} type="password" placeholder="Confirm Password" />
+        </Group>
         <ButtonWrapper>
           <Button purpose="Register" />
         </ButtonWrapper>
@@ -41,7 +42,9 @@ const Container = styled.div`
     margin-bottom: 10px;
   }
 `;
-
+const Group=styled.div`
+    transform: translateX(-15px);
+`
 const ButtonWrapper = styled.div`
   margin-top: 20px;
   display: flex;

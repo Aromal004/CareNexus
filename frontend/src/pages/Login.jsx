@@ -75,11 +75,9 @@ const Content=styled.div`
 `
 const ResetPass=styled.div`
     display: flex;
-    justify-content: end;
-    gap: 30px;
-
+    justify-content: space-between;
+    padding-left: 18px;
     width: 100%;
-    transform: translateX(-40px);
     a{
         text-decoration: none;
         color: #ffffff;
