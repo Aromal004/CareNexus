@@ -1,36 +1,28 @@
-
-import { FaUser } from "react-icons/fa6";
-import { FaLock } from "react-icons/fa6";
-import Button from '../components/button';
 import styled from "styled-components";
+import { FaLock } from "react-icons/fa6";
+import Button from "../components/button";
 import InputField from "../components/InputField";
 
-
-function Login() {
-  return (
+function ResetPass(){
+    return(
         <Container>
             <Content>
-                <h1>Login</h1>
+                <h2>Reset Password</h2>
                 <Group>
-                    <InputField icon={<FaUser fontSize="20px" />} type="email" placeholder="Enter Your Email" />
-                    <InputField icon={<FaLock fontSize="20px" />} type="password" placeholder="Password" />
-                    <ResetPass>
-                        <a href="/reset-password">Forgot password</a>
-                        <a href="/register">Don't have an account?</a>
-                    </ResetPass>
+                    <InputField icon={<FaLock fontSize="20px" />} type="password" placeholder="Enter New Password" />
+                    <InputField icon={<FaLock fontSize="20px" />} type="password" placeholder="Confirm Password" />
                 </Group>
                 <ButtonWrapper>
-                    <Button purpose="Login" />
+                    <Button purpose="Continue" />
                 </ButtonWrapper>
 
         </Content>
-        
+    </Container>
 
-        </Container>
-  )
+    )
+
 }
-
-export default Login
+export default ResetPass
 
 
 const Container = styled.div`
@@ -44,7 +36,7 @@ const Container = styled.div`
     justify-content: center;
     color: white;
     height: 100vh; 
-    h1{
+    h2{
         color: white;
         margin-bottom: 10px;
     }
@@ -72,19 +64,4 @@ const Content=styled.div`
     backdrop-filter: blur(8px);
     border-radius: 10px;
 
-`
-const ResetPass=styled.div`
-    display: flex;
-    justify-content: space-between;
-    padding-left: 18px;
-    width: 100%;
-    a{
-        text-decoration: none;
-        color: #ffffff;
-        font-weight: 300;
-        font-size: 13px;
-        &:hover{
-            color: #22a354;
-        }
-    }
 `

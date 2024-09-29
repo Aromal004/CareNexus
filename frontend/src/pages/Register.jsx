@@ -30,7 +30,7 @@ export default Register;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  background: url(images/background.jpg) no-repeat;
+  background: url(images/background_2.jpg) no-repeat;
   background-size: cover;
   background-position: center;
   align-items: center;
