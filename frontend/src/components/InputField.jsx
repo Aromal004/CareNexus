@@ -1,16 +1,15 @@
 import styled from "styled-components";
 
 
-function InputField({icon,type,placeholder}){
+function InputField({icon,type,placeholder,Change,n,v}){
 
     return(
 
         <Input>
             <div className="icon">{icon}</div>
             <div className="textfield">
-                <input type={type}  placeholder={placeholder} required/>
+                <input type={type} name={n} value={v}  placeholder={placeholder} onChange={Change} required/>
             </div>
-            
         </Input>
     )
 }

@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
 
-function Button({purpose}){
+function Button({purpose,type}){
     return (
         <Buton>
-            <button>{purpose}</button>
+            <button type={type}>{purpose}</button>
         </Buton>
     )
 }

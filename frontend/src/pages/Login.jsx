@@ -4,33 +4,52 @@ import { FaLock } from "react-icons/fa6";
 import Button from '../components/button';
 import styled from "styled-components";
 import InputField from "../components/InputField";
+import React,{useState} from "react";
+import { Link,redirect } from "react-router-dom";
+import {connect, Provider} from "react-redux"
+import { login } from "../actions/auth";
 
+function Login({login}) {
 
-function Login() {
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    })
+
+    const {email, password } = formData;
+
+    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
+
+    const onSubmit =e => { console.log("submit")
+        e.preventDefault();
+        console.log(formData)
+        login(email,password)
+    }
   return (
         <Container>
             <Content>
                 <h1>Login</h1>
-                <Group>
-                    <InputField icon={<FaUser fontSize="20px" />} type="email" placeholder="Enter Your Email" />
-                    <InputField icon={<FaLock fontSize="20px" />} type="password" placeholder="Password" />
-                    <ResetPass>
-                        <a href="/reset-password">Forgot password</a>
-                        <a href="/register">Don't have an account?</a>
-                    </ResetPass>
-                </Group>
-                <ButtonWrapper>
-                    <Button purpose="Login" />
-                </ButtonWrapper>
-
+                <form action="" onSubmit={e => onSubmit(e)}>
+                    <Group>                
+                        <InputField n="email" icon={<FaUser fontSize="20px" />} type="email" placeholder="Enter Your Email" v={email} Change={onChange} required/>
+                        <InputField n="password" icon={<FaLock fontSize="20px" />} type="password" placeholder="Password" v={password} Change={onChange} required />
+                        <ResetPass>
+                            <Link to="/reset-password">Forgot password</Link>
+                            <a href="/register">Don't have an account?</a>
+                        </ResetPass>                    
+                    </Group>
+                    <ButtonWrapper>
+                        <Button purpose="Login" type="submit"/>
+                    </ButtonWrapper>
+                </form>
         </Content>
-        
-
         </Container>
   )
 }
 
-export default Login
+
+
+export default  connect(null,{ login })(Login)
 
 
 const Container = styled.div`
