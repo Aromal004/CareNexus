@@ -136,7 +136,7 @@ const Links = styled.div`
     transition: color 0.3s;
 
     &:hover {
-      color: #22a354;
+      color: #007bff;
     }
   }
 `;

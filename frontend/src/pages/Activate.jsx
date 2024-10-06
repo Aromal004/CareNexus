@@ -5,7 +5,6 @@ import { verify } from '../actions/auth';
 import styled from 'styled-components';
 
 const Activate = ({ verify }) => {
-    const [verified, setVerified] = useState(false);
     const navigate = useNavigate();
     const { uid, token } = useParams(); 
 
@@ -17,57 +16,61 @@ const Activate = ({ verify }) => {
     };
 
     return (
-        <Container>
+        <PageContainer>
             <Content>
-                <h1>Verify your Account:</h1>
+                <h1>Verify Your Account</h1>
                 <Button onClick={verify_account}>
-                    Verify
+                    Verify Account
                 </Button>
             </Content>
-        </Container>
+        </PageContainer>
     );
 };
 
 export default connect(null, { verify })(Activate);
 
 // Styled Components
-const Container = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+
+const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-size: cover;
 `;
 
 const Content = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 30px;
-    border-radius: 10px;
-    backdrop-filter: blur(10px);
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  text-align: center;
 
-    h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
-        color: white;
-    }
+  h1 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+  }
 `;
 
 const Button = styled.button`
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    color: white;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  margin-top: 20px;
+  padding: 10px 30px;
+  font-size: 16px;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 
-    &:hover {
-        background-color: #0056b3;
-    }
+  &:hover {
+    background-color: #0056b3;
+  }
 `;
