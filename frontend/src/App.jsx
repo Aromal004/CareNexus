@@ -5,6 +5,10 @@ import ResetPass from './pages/Resetpass';
 import React,{useState} from 'react';
 import { Provider } from 'react-redux';
 import store from './components/store';
+import SecondPage from './pages/SecondPage';
+import User_chk from './components/user_chk';
+
+
 
 function App() {
 
@@ -16,6 +20,9 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/reset-password" element={<ResetPass />} />
+            <Route path="/SecondPage" element={<SecondPage />} />
+            <Route path="/" element={<User_chk />} />
+
           </Routes>
       </Router>
     </Provider>
