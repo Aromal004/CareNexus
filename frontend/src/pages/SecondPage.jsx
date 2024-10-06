@@ -4,26 +4,6 @@ import Patient from '../components/Patient';
 import Doctor from '../components/Doctor';
 import HospitalAdministration from '../components/HospitalAdministration';
 
-// const Patient = () => (
-//   <div>
-//     <h2>Patient Component</h2>
-//     <p>Patient-related information goes here.</p>
-//   </div>
-// );
-
-// const Doctor = () => (
-//   <div>
-//     <h2>Doctor Component</h2>
-//     <p>Doctor-related information goes here.</p>
-//   </div>
-// );
-
-// const HospitalAdmin = () => (
-//   <div>
-//     <h2>Hospital Administration Component</h2>
-//     <p>Hospital admin-related information goes here.</p>
-//   </div>
-// );
 
 function SecondPage() {
   const [selectedRole, setSelectedRole] = useState(null); // Track selected role

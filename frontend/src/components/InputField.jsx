@@ -1,44 +1,61 @@
 import styled from "styled-components";
 
-
-function InputField({icon,type,placeholder,Change,n,v}){
-
-    return(
-
-        <Input>
-            <div className="icon">{icon}</div>
-            <div className="textfield">
-                <input type={type} name={n} value={v}  placeholder={placeholder} onChange={Change} required/>
-            </div>
-        </Input>
-    )
+function InputField({ icon, type, placeholder, Change, n, v }) {
+  return (
+    <InputContainer>
+      <div className="icon">{icon}</div>
+      <input
+        type={type}
+        name={n}
+        value={v}
+        placeholder={placeholder}
+        onChange={Change}
+        required
+      />
+    </InputContainer>
+  );
 }
 
-export default InputField
+export default InputField;
 
-const Input=styled.div`
-    display: flex;
-    height: 50px;
-    width: 350px;
-    align-items: center;
-    color: #d8d8d8;
+// Styled component for the InputField
+const InputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  height: 50px;
+  width: 390px;
+  margin-bottom: 15px;
+  border-radius: 25px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  
+  .icon {
+    margin-left: 15px;
+    color: #555;
+  }
 
-    input{
-        height: 30px;
-        font-size: 16px;
-        font-weight: 250;
-        width: 300px;
-        border-radius: 25px;
-        padding: 5px 5px 5px 35px;
-        border: 1px solid #727272;
-        background-color: transparent;
-        color: white;
-        &::placeholder{
-            text-align: center;
-            color: white;
-        }
+  input {
+    flex-grow: 1;
+    height: 40px;
+    border: none;
+    padding: 0 15px;
+    font-size: 16px;
+    border-radius: 25px;
+    outline: none;
+    background: transparent;
+    color: #333;
+
+    &::placeholder {
+      color: #999;
     }
-    .icon{
-        transform: translateX(30px);
-    }
-`
+  }
+
+  &:focus-within {
+    border-color: #22a354;
+  }
+`;
+
+
+
+
