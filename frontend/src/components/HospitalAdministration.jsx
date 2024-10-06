@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import './styles.css';
+import './styles.css'; // Ensure you have styles.css imported for any additional styles
+import { useNavigate } from 'react-router-dom';
 
 const HospitalAdministration = () => {
   const [addressLine1, setAddressLine1] = useState('');
   const [addressLine2, setAddressLine2] = useState('');
   const [locationURL, setLocationURL] = useState('');
   const [pincode, setPincode] = useState('');
+  const navigate = useNavigate();
+
+  const [isHovered, setIsHovered] = useState(false); // State for hover effect
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,6 +19,7 @@ const HospitalAdministration = () => {
       locationURL,
       pincode,
     });
+    navigate('/home')
   };
 
   return (
@@ -65,7 +70,17 @@ const HospitalAdministration = () => {
           />
         </div>
 
-        <button type="submit" style={styles.button}>Submit</button>
+        <button
+          type="submit"
+          style={{
+            ...styles.button,
+            backgroundColor: isHovered ? '#0056b3' : '#007bff', // Change background color on hover
+          }}
+          onMouseEnter={() => setIsHovered(true)} // Set hover state
+          onMouseLeave={() => setIsHovered(false)} // Reset hover state
+        >
+          Submit
+        </button>
       </form>
     </div>
   );
@@ -117,7 +132,6 @@ const styles = {
   button: {
     padding: '10px 20px',
     fontSize: '16px',
-    backgroundColor: '#007bff',
     color: 'white',
     border: 'none',
     borderRadius: '50px',

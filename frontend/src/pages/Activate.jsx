@@ -11,7 +11,7 @@ const Activate = ({ verify }) => {
     const verify_account = async () => {
         const success = await verify(uid, token);
         if (success) {
-            navigate('/');
+            navigate('/secondpage');
         }
     };
 

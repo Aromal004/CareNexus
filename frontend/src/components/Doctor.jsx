@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Doctor = () => {
   const [age, setAge] = useState('');
   const [speciality, setSpeciality] = useState('');
   const [hospital, setHospital] = useState('');
-//   const [medicalCondition, setMedicalCondition] = useState('');
+  const navigate = useNavigate();
+
+  const [isHovered, setIsHovered] = useState(false); // State for hover effect
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -12,8 +15,8 @@ const Doctor = () => {
       age,
       speciality,
       hospital,
-    //   medicalCondition,
     });
+    navigate('/home')
   };
 
   return (
@@ -31,28 +34,6 @@ const Doctor = () => {
           />
         </div>
 
-        {/* <div style={styles.formGroup}>
-          <label style={styles.label}>Height (cm):</label>
-          <input
-            type="number"
-            value={height}
-            onChange={(e) => setHeight(e.target.value)}
-            required
-            style={styles.input}
-          />
-        </div> */}
-
-        {/* <div style={styles.formGroup}>
-          <label style={styles.label}>Weight (kg):</label>
-          <input
-            type="number"
-            value={weight}
-            onChange={(e) => setWeight(e.target.value)}
-            required
-            style={styles.input}
-          />
-        </div> */}
-
         <div style={styles.formGroup}>
           <label style={styles.label}>Speciality:</label>
           <select
@@ -65,17 +46,11 @@ const Doctor = () => {
             <option value="General Medicine">General Medicine</option>
             <option value="Oncologist">Oncologist</option>
             <option value="Gastroenterologist">Gastroenterologist</option>
-            <option value="Gynaecologist">Gynecologist</option>
+            <option value="Gynecologist">Gynecologist</option> {/* Fixed typo */}
             <option value="Dermatologist">Dermatologist</option>
             <option value="Pediatrist">Pediatrist</option>
             <option value="General Surgeon">General Surgeon</option>
             <option value="Cardiologist">Cardiologist</option>
-            <option value="Other">Other</option>
-            {/* <option value="Heart Disease">Heart Disease</option>
-            <option value="Chronic Kidney Disease">Chronic Kidney Disease</option>
-            <option value="Depression">Depression</option>
-            <option value="COPD">COPD</option>
-            <option value="HIV/AIDS">HIV/AIDS</option> */}
           </select>
         </div>
 
@@ -91,20 +66,22 @@ const Doctor = () => {
             <option value="MIMS">MIMS</option>
             <option value="Govt Medical College">Govt Medical College</option>
             <option value="Baby Memorial Hospital">Baby Memorial Hospital</option>
-            <option value="Meditrina Hospoital">Meditrina Hospoital</option>
+            <option value="Meditrina Hospital">Meditrina Hospital</option> {/* Fixed typo */}
             <option value="PVS Hospital">PVS Hospital</option>
-            {/* <option value="Hypertension">Hypertension</option>
-            <option value="General Surgeon">General Surgeon</option>
-            <option value="Cardiologist">Cardiologist</option> */}
-            {/* <option value="Heart Disease">Heart Disease</option>
-            <option value="Chronic Kidney Disease">Chronic Kidney Disease</option>
-            <option value="Depression">Depression</option>
-            <option value="COPD">COPD</option>
-            <option value="HIV/AIDS">HIV/AIDS</option> */}
           </select>
         </div>
 
-        <button type="submit" style={styles.button}>Submit</button>
+        <button
+          type="submit"
+          style={{
+            ...styles.button,
+            backgroundColor: isHovered ? '#0056b3' : '#007bff', // Change background color on hover
+          }}
+          onMouseEnter={() => setIsHovered(true)}  // Set hover state
+          onMouseLeave={() => setIsHovered(false)} // Reset hover state
+        >
+          Submit
+        </button>
       </form>
     </div>
   );
@@ -156,7 +133,6 @@ const styles = {
   button: {
     padding: '10px 20px',
     fontSize: '16px',
-    backgroundColor: '#007bff',
     color: 'white',
     border: 'none',
     borderRadius: '50px',

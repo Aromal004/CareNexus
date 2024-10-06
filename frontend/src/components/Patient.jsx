@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 const Patient = () => {
   const [age, setAge] = useState('');
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [medicalCondition, setMedicalCondition] = useState('');
+  const navigate = useNavigate();
+  const [isHovered, setIsHovered] = useState(false); // State to manage hover effect
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,7 +16,11 @@ const Patient = () => {
       weight,
       medicalCondition,
     });
+    navigate('/home')
   };
+
+  
+
 
   return (
     <div style={styles.container}>
@@ -79,7 +85,17 @@ const Patient = () => {
           </select>
         </div>
 
-        <button type="submit" style={styles.button}>Submit</button>
+        <button
+          type="submit"
+          style={{
+            ...styles.button,
+            backgroundColor: isHovered ? '#0056b3' : '#007bff', // Change background color on hover
+          }}
+          onMouseEnter={() => setIsHovered(true)}  // Set hover state
+          onMouseLeave={() => setIsHovered(false)} // Reset hover state
+        >
+          Submit
+        </button>
       </form>
     </div>
   );
@@ -131,7 +147,6 @@ const styles = {
   button: {
     padding: '10px 20px',
     fontSize: '16px',
-    backgroundColor: '#007bff',
     color: 'white',
     border: 'none',
     borderRadius: '50px',
