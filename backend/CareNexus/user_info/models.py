@@ -11,3 +11,12 @@ class PatientInfo(models.Model):
 
 
 
+
+class DoctorInfo(models.Model):
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    age = models.PositiveIntegerField()
+    speciality = models.CharField(max_length=255)
+    hospital = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"Dr. {self.speciality} - {self.hospital}"
