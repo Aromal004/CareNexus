@@ -18,6 +18,7 @@ function Register({ signup }) {
   });
 
   const { name, email, phone, password, re_password } = formData;
+  const [loading, setLoading] = useState(false); // Add loading state
   const navigate = useNavigate();  
 
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,29 +27,32 @@ function Register({ signup }) {
     e.preventDefault();
     
     if (password === re_password) {
-        const register = await signup(name, email, phone, password, re_password);
-        
-        if (register && register.status === 201) {
-            localStorage.setItem('email', email);
-            localStorage.setItem('password', password);
-            navigate("/");
-        } else if (register && register.status === 400) {
-            const errorData = register.data;
-            if (errorData.email) {
-                alert(`Email error: ${errorData.email[0]}`);
-                setFormData({ ...formData, email: "" });
-            } else if (errorData.password) {
-                alert(`Password error: ${errorData.password[0]}`);
-                setFormData({ ...formData, re_password: "", password: "" });
-            } else {
-                alert("An error occurred during registration. Please try again.");
-            }
-        } else {
-            alert("Something went wrong. Please try again.");
-        }
+      setLoading(true); // Set loading to true when registration starts
+
+      const register = await signup(name, email, phone, password, re_password);
+      setLoading(false); // Set loading to false after the response is received
+
+      if (register && register.status === 201) {
+          localStorage.setItem('email', email);
+          localStorage.setItem('password', password);
+          navigate("/");
+      } else if (register && register.status === 400) {
+          const errorData = register.data;
+          if (errorData.email) {
+              alert(`Email error: ${errorData.email[0]}`);
+              setFormData({ ...formData, email: "" });
+          } else if (errorData.password) {
+              alert(`Password error: ${errorData.password[0]}`);
+              setFormData({ ...formData, re_password: "", password: "" });
+          } else {
+              alert("An error occurred during registration. Please try again.");
+          }
+      } else {
+          alert("Something went wrong. Please try again.");
+      }
     } else {
-        alert("Passwords do not match!");
-        setFormData({ ...formData, re_password: "", password: "" });
+      alert("Passwords do not match!");
+      setFormData({ ...formData, re_password: "", password: "" });
     }
   };
 
@@ -105,7 +109,7 @@ function Register({ signup }) {
             />
           </FormGroup>
           <ButtonWrapper>
-            <Button purpose="Register" type="submit" />
+            <Button purpose={loading ? "Registering..." : "Register"} type="submit" disabled={loading} />
           </ButtonWrapper>
         </form>
       </Content>
@@ -171,4 +175,3 @@ const ButtonWrapper = styled.div`
   justify-content: center;
   width: 100%;
 `;
-
