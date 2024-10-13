@@ -10,6 +10,9 @@ import Layout from './hocs/Layout';
 import ReqResetPass from './pages/ReqResetPass';
 import Resetpass from './pages/Resetpass';
 import Activate from './pages/Activate';
+import HospitalAdministration from './components/HospitalAdministration';
+import Doctor from './components/Doctor';
+import Patient from './components/Patient';
 
 function App() {
 
@@ -26,6 +29,9 @@ function App() {
               <Route exact path='/password/reset/confirm/:uid/:token' element={<Resetpass />} />
               <Route exact path='/activate/:uid/:token' element={<Activate />} />
               <Route path='/secondpage' element={<SecondPage />} />
+              <Route path='/user_info/Patient-Details' element={<Patient />} />
+              <Route path='/user_info/Doctor-Details' element={<Doctor />} />
+              <Route path='/user_info/HospitalAdmin-Details' element={<HospitalAdministration />} />
             </Routes>
           </Layout>
       </Router>

@@ -29,6 +29,8 @@ function Register({ signup }) {
         const register = await signup(name, email, phone, password, re_password);
         
         if (register && register.status === 201) {
+            localStorage.setItem('email', email);
+            localStorage.setItem('password', password);
             navigate("/");
         } else if (register && register.status === 400) {
             const errorData = register.data;

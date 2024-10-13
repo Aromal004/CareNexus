@@ -96,22 +96,27 @@ export const login = (email, password) => async dispatch => {
     try {
         const res = await axios.post('http://localhost:8000/auth/jwt/create/', body, config);
 
+        // Save the token in localStorage
         localStorage.setItem('access', res.data.access);
-
 
         dispatch({
             type: LOGIN_SUCCESS,
             payload: res.data
         });
 
-        dispatch(load_user());
+        // Load user data
+        await dispatch(load_user());
+
+        return true; // return success status for further actions (i.e., redirect)
     } catch (err) {
         console.log(err);
         dispatch({
             type: LOGIN_FAIL
         });
+        return false;  // return failure status for further actions
     }
 };
+
 
 
 export const signup = (name,email, phone, password, re_password) => async dispatch => {
