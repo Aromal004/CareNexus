@@ -10,6 +10,8 @@ import Layout from './hocs/Layout';
 import ReqResetPass from './pages/ReqResetPass';
 import Resetpass from './pages/Resetpass';
 import Activate from './pages/Activate';
+import LandingPage from './pages/LandingPage';
+import Dashboard from './pages/Dashboard';
 
 function App() {
 
@@ -26,6 +28,8 @@ function App() {
               <Route exact path='/password/reset/confirm/:uid/:token' element={<Resetpass />} />
               <Route exact path='/activate/:uid/:token' element={<Activate />} />
               <Route path='/secondpage' element={<SecondPage />} />
+              <Route path="/landingpage" element={<LandingPage />} /> 
+              <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
           </Layout>
       </Router>
