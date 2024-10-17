@@ -16,6 +16,7 @@ import {
     ACTIVATION_FAIL,
     ACTIVATION_SUCCESS
 } from '../actions/types';
+import Cookies from 'js-cookie';
 
 
 export const checkAuthenticated = () => async dispatch => {
@@ -90,28 +91,55 @@ export const login = (email, password) => async dispatch => {
             'Content-Type': 'application/json'
         }
     };
-    
+
     const body = JSON.stringify({ email, password });
 
     try {
+        // 1. JWT Token login
         const res = await axios.post('http://localhost:8000/auth/jwt/create/', body, config);
 
+        // Save the JWT token in localStorage
         localStorage.setItem('access', res.data.access);
-
 
         dispatch({
             type: LOGIN_SUCCESS,
             payload: res.data
         });
 
-        dispatch(load_user());
+        // Load user data after JWT login
+        await dispatch(load_user());
+
+        // 2. Retrieve the CSRF token from cookies using js-cookie
+        const csrfToken = Cookies.get('csrftoken'); 
+
+        if (csrfToken) {
+            // 3. Set up the session login request with CSRF token
+            const sessionLoginConfig = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken  // Include CSRF token in the headers
+                }
+            };
+
+            // 4. Make the session login request
+            console.log(body)
+            await axios.post('http://localhost:8000/login/', body, sessionLoginConfig);
+
+            return true; // Return success status for further actions
+        } else {
+            console.error('CSRF token not found');
+            return false;
+        }
+
     } catch (err) {
         console.log(err);
         dispatch({
             type: LOGIN_FAIL
         });
+        return false;  // Return failure status for further actions
     }
 };
+
 
 
 export const signup = (name,email, phone, password, re_password) => async dispatch => {
@@ -140,11 +168,24 @@ export const signup = (name,email, phone, password, re_password) => async dispat
     }
 };
 
-export const logout =() => dispatch =>{
+export const logout = () => async dispatch => {
     dispatch({
         type:LOGOUT
     })
-}
+    // try {
+    //     // Logout from session-based auth
+    //     dispatch({ type: LOGOUT });
+    //     // await axios.post('http://localhost:8000/logout/');
+
+    //     // // Clear localStorage (JWT token and CSRF token)
+    //     // localStorage.removeItem('access');
+    //     // localStorage.removeItem('csrfToken');
+
+        
+    // } catch (err) {
+    //     console.log(err);
+    // }
+};
 
 
 export const verify = (uid,token) => async dispatch =>{

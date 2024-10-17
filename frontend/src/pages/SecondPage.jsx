@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import User_chk from '../components/user_chk';
-import Patient from '../components/Patient';
-import Doctor from '../components/Doctor';
-import HospitalAdministration from '../components/HospitalAdministration';
+import { useNavigate } from 'react-router-dom';
 
 
 function SecondPage() {
+  const navigate = useNavigate();
   const [selectedRole, setSelectedRole] = useState(null); // Track selected role
   const [showOptions, setShowOptions] = useState(true); // Track whether to show User_chk
 
@@ -13,13 +12,16 @@ function SecondPage() {
   const renderComponent = () => {
     switch (selectedRole) {
       case 'Patient':
-        return <Patient/>;
+        navigate('/user_info/Patient-Details');
+        break;
       case 'Doctor':
-        return <Doctor />;
+        navigate('/user_info/Doctor-Details');
+        break;
       case 'Hospital Administration':
-        return <HospitalAdministration />;
+        navigate('/user_info/HospitalAdmin-Details');
+        break;
       default:
-        return null; // No role selected, return null
+        break; // Do nothing if no role is selected
     }
   };
 

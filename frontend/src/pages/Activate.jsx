@@ -1,33 +1,50 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { verify } from '../actions/auth';
+import { verify, login } from '../actions/auth'; // Import login action
 import styled from 'styled-components';
 
-const Activate = ({ verify }) => {
+const Activate = ({ verify, login }) => {
     const navigate = useNavigate();
-    const { uid, token } = useParams(); 
+    const { uid, token } = useParams();
+    const [isVerifying, setIsVerifying] = useState(false); // To handle UI state (optional)
 
     const verify_account = async () => {
+        setIsVerifying(true);  // Optional, to show loading spinner
         const success = await verify(uid, token);
         if (success) {
-            navigate('/secondpage');
+            // Assuming you can get the user's email from the URL, a form, or store
+            const email = localStorage.getItem('email');  // Assuming email is stored on signup
+
+            if (email) {
+                const password = localStorage.getItem('password');  // Assuming password stored on signup
+                if (password) {
+                    const loginSuccess = await login(email, password);
+                    if (loginSuccess) {
+                        navigate('/secondpage');
+                    } else {
+                        console.error("Auto login failed after verification");
+                    }
+                }
+            }
         }
+        setIsVerifying(false);  // Stop loading spinner
     };
 
     return (
         <PageContainer>
             <Content>
                 <h1>Verify Your Account</h1>
-                <Button onClick={verify_account}>
-                    Verify Account
+                <Button onClick={verify_account} disabled={isVerifying}>
+                    {isVerifying ? 'Verifying...' : 'Verify Account'}
                 </Button>
             </Content>
         </PageContainer>
     );
 };
 
-export default connect(null, { verify })(Activate);
+export default connect(null, { verify, login })(Activate); // Include login in connect
+
 
 // Styled Components
 

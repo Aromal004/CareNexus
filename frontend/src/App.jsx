@@ -12,6 +12,9 @@ import Resetpass from './pages/Resetpass';
 import Activate from './pages/Activate';
 import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
+import HospitalAdministration from './components/HospitalAdministration';
+import Doctor from './components/Doctor';
+import Patient from './components/Patient';
 
 function App() {
 
@@ -30,6 +33,9 @@ function App() {
               <Route path='/secondpage' element={<SecondPage />} />
               <Route path="/landingpage" element={<LandingPage />} /> 
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path='/user_info/Patient-Details' element={<Patient />} />
+              <Route path='/user_info/Doctor-Details' element={<Doctor />} />
+              <Route path='/user_info/HospitalAdmin-Details' element={<HospitalAdministration />} />
             </Routes>
           </Layout>
       </Router>

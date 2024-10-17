@@ -1,30 +1,62 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Cookies from 'js-cookie'; // Import js-cookie
+
 const Patient = () => {
   const [age, setAge] = useState('');
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
   const [medicalCondition, setMedicalCondition] = useState('');
+  const [error, setError] = useState(null); // To handle any error from the backend
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false); // State to manage hover effect
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({
-      age,
-      height,
-      weight,
-      medicalCondition,
-    });
-    navigate('/home')
+
+    // Prepare form data to be sent to the backend
+    const data = {
+      age: parseInt(age, 10),
+      height: parseFloat(height),
+      weight: parseFloat(weight),
+      medical_condition: medicalCondition,
+    };
+
+    try {
+      // Retrieve CSRF token from cookies
+      const csrfToken = Cookies.get('csrftoken'); // Get CSRF token from cookies
+
+      // Make the POST request to Django backend
+      console.log(localStorage.getItem('access'));
+      const response = await axios.post('http://localhost:8000/user_info/Patient-Details/', data, {
+        
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `JWT ${localStorage.getItem('access')}`,  // Include JWT token for authentication
+          'X-CSRFToken': csrfToken,  // Include CSRF token in the request
+        }
+      });
+
+      // Handle successful response
+      if (response.data.status === 'success') {
+        alert('Patient info saved successfully!');
+        navigate('/home');  // Redirect to home after successful form submission
+      }
+    } catch (error) {
+      // Handle errors (e.g., network issues or backend validation errors)
+      console.error('Error submitting patient info:', error);
+      setError('Failed to save patient info. Please try again.');
+    }
   };
-
-  
-
 
   return (
     <div style={styles.container}>
       <h2 style={styles.header}>Patient Information</h2>
+      
+      {/* Display error if there is one */}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      
       <form onSubmit={handleSubmit} style={styles.form}>
         <div style={styles.formGroup}>
           <label style={styles.label}>Age:</label>
