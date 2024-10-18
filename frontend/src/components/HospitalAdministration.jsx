@@ -19,7 +19,7 @@ const HospitalAdministration = () => {
       locationURL,
       pincode,
     });
-    navigate('/dashboard')
+    navigate('/landingpage')
   };
 
   return (
