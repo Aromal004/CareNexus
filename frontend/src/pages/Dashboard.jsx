@@ -28,14 +28,12 @@ const Title = styled.h2`
 `;
 
 // Grid for aligned text
-// Grid for aligned text
 const InfoGrid = styled.div`
   display: grid;
   grid-template-columns: 150px auto;
   row-gap: 10px;
-  column-gap: px;  // Reduced the column gap for a tighter layout
+  column-gap: 10px;  // Adjusted column gap for tighter layout
 `;
-
 
 const Label = styled.p`
   font-size: 1.1rem;
@@ -86,47 +84,45 @@ const Dashboard = () => {
 
   return (
     <>
-    <Nav/>
-    <Container>
-      {userInfo ? (
-        <InfoCard>
-          {userInfo.user_type === 'patient' ? (
-            <>
-              <Title>Patient Dashboard</Title>
-              <InfoGrid>
-                <Label>Age:</Label>
-                <Value>{userInfo.age}</Value>
+      <Nav />
+      <Container>
+        {userInfo ? (
+          <InfoCard>
+            <Title>{userInfo.user_type === 'patient' ? 'Patient Dashboard' : 'Doctor Dashboard'}</Title>
+            <InfoGrid>
+              {/* Display user name */}
+              <Label>Name:</Label>
+              <Value>{userInfo.name}</Value>
 
-                <Label>Height:</Label>
-                <Value>{userInfo.height} cm</Value>
+              <Label>Age:</Label>
+              <Value>{userInfo.age}</Value>
 
-                <Label>Weight:</Label>
-                <Value>{userInfo.weight} kg</Value>
+              {userInfo.user_type === 'patient' ? (
+                <>
+                  <Label>Height:</Label>
+                  <Value>{userInfo.height} cm</Value>
 
-                <Label>Medical Condition:</Label>
-                <Value>{userInfo.medical_condition}</Value>
-              </InfoGrid>
-            </>
-          ) : (
-            <>
-              <Title>Doctor Dashboard</Title>
-              <InfoGrid>
-                <Label>Age:</Label>
-                <Value>{userInfo.age}</Value>
+                  <Label>Weight:</Label>
+                  <Value>{userInfo.weight} kg</Value>
 
-                <Label>Speciality:</Label>
-                <Value>{userInfo.speciality}</Value>
+                  <Label>Medical Condition:</Label>
+                  <Value>{userInfo.medical_condition}</Value>
+                </>
+              ) : (
+                <>
+                  <Label>Speciality:</Label>
+                  <Value>{userInfo.speciality}</Value>
 
-                <Label>Hospital:</Label>
-                <Value>{userInfo.hospital}</Value>
-              </InfoGrid>
-            </>
-          )}
-        </InfoCard>
-      ) : (
-        <p>No user information found.</p>
-      )}
-    </Container>
+                  <Label>Hospital:</Label>
+                  <Value>{userInfo.hospital}</Value>
+                </>
+              )}
+            </InfoGrid>
+          </InfoCard>
+        ) : (
+          <p>No user information found.</p>
+        )}
+      </Container>
     </>
   );
 };

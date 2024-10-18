@@ -80,35 +80,41 @@ def save_doctor_info(request):
 @login_required
 def display_user_info(request):
     try:
-        print(f"Fetching info for user: {request.user}")  # Add this line for debugging
+        print(f"Fetching info for user: {request.user}")  # Debugging line
+
+        # Fetch the user's name
+        user_name = request.user.name
+
         # Check if the user has patient information
         try:
             patient_info = PatientInfo.objects.get(user=request.user)
             data = {
                 'user_type': 'patient',
+                'name': user_name,  # Include the user name
                 'age': patient_info.age,
                 'height': patient_info.height,
                 'weight': patient_info.weight,
                 'medical_condition': patient_info.medical_condition,
             }
         except PatientInfo.DoesNotExist:
-            print(f"No patient info found for user: {request.user}")  # Add this line
+            print(f"No patient info found for user: {request.user}")  # Debugging line
             # If no patient info exists, check if the user is a doctor
             try:
                 doctor_info = DoctorInfo.objects.get(user=request.user)
                 data = {
                     'user_type': 'doctor',
+                    'name': user_name,  # Include the user name
                     'age': doctor_info.age,
                     'speciality': doctor_info.speciality,
                     'hospital': doctor_info.hospital,
                 }
             except DoctorInfo.DoesNotExist:
-                print(f"No doctor info found for user: {request.user}")  # Add this line
+                print(f"No doctor info found for user: {request.user}")  # Debugging line
                 return JsonResponse({'status': 'error', 'message': 'User information not found'}, status=404)
 
         # Return the user info as JSON for the React frontend
         return JsonResponse({'status': 'success', 'data': data}, status=200)
 
     except Exception as e:
-        print(f"Error: {str(e)}")  # Add this line
+        print(f"Error: {str(e)}")  # Debugging line
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
