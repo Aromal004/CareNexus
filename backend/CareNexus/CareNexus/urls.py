@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
 from login_register.views import custom_session_login_view,custom_session_logout_view
+from user_info.views import display_user_info
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -12,7 +13,8 @@ urlpatterns = [
     path('auth/', include('djoser.urls.jwt')),
     path('user_info/', include('user_info.urls')),
     path('login/', custom_session_login_view, name='login'),   
-    path('logout/', custom_session_logout_view, name='logout'),  
+    path('logout/', custom_session_logout_view, name='logout'),
+    path('dashboard/',display_user_info)  
 ]
 
 
