@@ -25,7 +25,7 @@ function Login({ login, isAuthenticated, error }) {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/home");  
+      navigate("/dashboard");  
     }
   }, [isAuthenticated, navigate]);
 

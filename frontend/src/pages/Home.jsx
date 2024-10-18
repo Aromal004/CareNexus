@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Nav from "../components/Nav";
 import styled from "styled-components";
 
@@ -136,6 +137,12 @@ const FooterText = styled.p`
 `;
 
 function Home() {
+  const navigate = useNavigate(); // useNavigate hook
+
+  const handleGetStarted = () => {
+    navigate("/login"); // Navigate to /login
+  };
+
   return (
     <Container>
       <Nav />
@@ -144,7 +151,7 @@ function Home() {
       <HeroSection>
         <HeroTitle>Welcome to CareNexus</HeroTitle>
         <HeroSubtitle>Efficient, Connected, and Secure Healthcare Operations</HeroSubtitle>
-        <CTAButton>Get Started</CTAButton>
+        <CTAButton onClick={handleGetStarted}>Get Started</CTAButton>
       </HeroSection>
 
       {/* Features Section */}

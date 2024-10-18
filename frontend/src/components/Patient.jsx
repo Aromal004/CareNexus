@@ -41,7 +41,7 @@ const Patient = () => {
       // Handle successful response
       if (response.data.status === 'success') {
         alert('Patient info saved successfully!');
-        navigate('/home');  // Redirect to home after successful form submission
+        navigate('/dashboard');  // Redirect to dashboard after successful form submission
       }
     } catch (error) {
       // Handle errors (e.g., network issues or backend validation errors)

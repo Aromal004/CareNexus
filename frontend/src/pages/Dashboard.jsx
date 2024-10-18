@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import Nav from '../components/Nav';
 
 // Main container
 const Container = styled.div`
@@ -84,6 +85,8 @@ const Dashboard = () => {
   }
 
   return (
+    <>
+    <Nav/>
     <Container>
       {userInfo ? (
         <InfoCard>
@@ -124,6 +127,7 @@ const Dashboard = () => {
         <p>No user information found.</p>
       )}
     </Container>
+    </>
   );
 };
 

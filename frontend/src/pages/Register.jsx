@@ -35,7 +35,7 @@ function Register({ signup }) {
       if (register && register.status === 201) {
           localStorage.setItem('email', email);
           localStorage.setItem('password', password);
-          navigate("/");
+          navigate("/login");
       } else if (register && register.status === 400) {
           const errorData = register.data;
           if (errorData.email) {

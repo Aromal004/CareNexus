@@ -24,10 +24,10 @@ function App() {
       <Router >
         <Layout>
           <Routes>
-              <Route path="/" element={<Login />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/reset-password" element={<ReqResetPass />} />
-              <Route path="/home" element={<Home />} />
+              <Route path="/" element={<Home />} />
               <Route exact path='/password/reset/confirm/:uid/:token' element={<Resetpass />} />
               <Route exact path='/activate/:uid/:token' element={<Activate />} />
               <Route path='/secondpage' element={<SecondPage />} />
