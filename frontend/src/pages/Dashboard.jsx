@@ -1,136 +1,124 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import Nav from '../components/Nav';
+import { FaUser, FaChartBar, FaDownload, FaSignOutAlt } from 'react-icons/fa';
+import { connect } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../actions/auth';
+import Profile from '../components/Profile';
+import Stats from '../components/Stats';
 
-// Main container
-const Container = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-`;
+const Sidebar = ({ logout }) => {
+    const [activeComponent, setActiveComponent] = useState('stats');  // By default, Stats is active
+    const navigate = useNavigate();
 
-// Card for user information
-const InfoCard = styled.div`
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  max-width: 350px;
-  width: 100%;
-`;
+    const handleLogout = () => {
+        logout();
+        navigate('/');  // Navigate to login page on logout
+    };
 
-const Title = styled.h2`
-  font-size: 2rem;
-  margin-bottom: 20px;
-  text-align: center;
-  color: #007bff;
-`;
-
-// Grid for aligned text
-const InfoGrid = styled.div`
-  display: grid;
-  grid-template-columns: 150px auto;
-  row-gap: 10px;
-  column-gap: 10px;  // Adjusted column gap for tighter layout
-`;
-
-const Label = styled.p`
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #060606;
-`;
-
-const Value = styled.p`
-  font-size: 1.1rem;
-  color: #050606;
-`;
-
-const Dashboard = () => {
-  const [userInfo, setUserInfo] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch('http://localhost:8000/dashboard/', {
-      method: 'GET',
-      credentials: 'include',  // Ensures cookies (auth) are included in the request
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
+    const renderComponent = () => {
+        switch (activeComponent) {
+            case 'profile':
+                return <Profile />;
+            // case 'download':
+            //     return <Download />;
+            default:
+                return <Stats />;
         }
-        throw new Error('Failed to fetch user information');
-      })
-      .then((data) => {
-        if (data.status === 'success') {
-          setUserInfo(data.data);
-        } else {
-          setError(data.message);
-        }
-      })
-      .catch((err) => {
-        setError(err.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+    };
 
-  if (loading) {
-    return <p>Loading user information...</p>;
-  }
+    return (
+        <Container>
+            <SidebarContainer>
+                <SidebarMenu>
+                    <MenuItem onClick={() => setActiveComponent('profile')}>
+                        <FaUser /> Profile
+                    </MenuItem>
+                    <MenuItem onClick={() => setActiveComponent('stats')}>
+                        <FaChartBar /> Stats
+                    </MenuItem>
+                    <MenuItem onClick={() => setActiveComponent('download')}>
+                        <FaDownload /> Download
+                    </MenuItem>
+                </SidebarMenu>
 
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
+                <LogoutButton onClick={handleLogout}>
+                    <FaSignOutAlt /> Logout
+                </LogoutButton>
+            </SidebarContainer>
 
-  return (
-    <>
-      <Nav />
-      <Container>
-        {userInfo ? (
-          <InfoCard>
-            <Title>{userInfo.user_type === 'patient' ? 'Patient Dashboard' : 'Doctor Dashboard'}</Title>
-            <InfoGrid>
-              {/* Display user name */}
-              <Label>Name:</Label>
-              <Value>{userInfo.name}</Value>
-
-              <Label>Age:</Label>
-              <Value>{userInfo.age}</Value>
-
-              {userInfo.user_type === 'patient' ? (
-                <>
-                  <Label>Height:</Label>
-                  <Value>{userInfo.height} cm</Value>
-
-                  <Label>Weight:</Label>
-                  <Value>{userInfo.weight} kg</Value>
-
-                  <Label>Medical Condition:</Label>
-                  <Value>{userInfo.medical_condition}</Value>
-                </>
-              ) : (
-                <>
-                  <Label>Speciality:</Label>
-                  <Value>{userInfo.speciality}</Value>
-
-                  <Label>Hospital:</Label>
-                  <Value>{userInfo.hospital}</Value>
-                </>
-              )}
-            </InfoGrid>
-          </InfoCard>
-        ) : (
-          <p>No user information found.</p>
-        )}
-      </Container>
-    </>
-  );
+            <ContentContainer>
+                {renderComponent()} {/* Renders the active component */}
+            </ContentContainer>
+        </Container>
+    );
 };
 
-export default Dashboard;
+export default connect(null, { logout })(Sidebar);
+
+const Container = styled.div`
+    display: flex;
+    height: 100vh;
+`;
+
+const SidebarContainer = styled.div`
+    width: 250px;
+    background-color: #5c6875; /* Using blue from other file */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+`;
+
+const SidebarMenu = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+`;
+
+const MenuItem = styled.div`
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    color: whitesmoke;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+
+    svg {
+        margin-right: 10px;
+    }
+
+    &:hover {
+        background-color: #0056b3; /* Darker shade of blue for hover */
+    }
+`;
+
+const LogoutButton = styled.button`
+    background-color: #e74c3c; /* Keeping the red color for logout */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: auto;
+
+    svg {
+        margin-right: 10px;
+    }
+
+    &:hover {
+        background-color: #c0392b; /* Darker red on hover */
+    }
+`;
+
+const ContentContainer = styled.div`
+    flex: 1;
+    padding: 20px;
+    background-color: #f8f9fa; /* Light background color for the main content area */
+`;

@@ -1,142 +1,152 @@
-
 import { useState } from "react";
 import styled from "styled-components";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { Link, Navigate, redirect, useNavigate } from "react-router-dom"; 
+import { Link as ScrollLink } from "react-scroll"; // Import from react-scroll
+import { useNavigate } from "react-router-dom";
 import { logout } from "../actions/auth";
 import { connect } from "react-redux";
 
-function Nav({logout}) {
-    const [isOpen, setIsOpen] = useState(false);  
-    const Navigate = useNavigate()
+function Nav({ logout }) {
+    const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
+
     const toggleMenu = () => {
         setIsOpen(!isOpen);
     };
 
-    const logoutuser = () =>{
+    const logoutUser = () => {
         logout();
-        Navigate("/")
-    }
+        navigate("/");
+    };
 
     return (
         <NavBar>
-            <div className='logo'>
+            <LogoContainer>
                 <img src="images/ACM logo.png" alt="logo" />
                 <p>CareNexus</p>
-            </div>
+            </LogoContainer>
             <Hamburger onClick={toggleMenu}>
                 {isOpen ? <FaTimes /> : <FaBars />}
             </Hamburger>
             <Menu isOpen={isOpen}>
-                <Link className='ListItem' to="/home">Home</Link>
-                <Link className='ListItem' to="#about">About</Link>
-                <Link className='ListItem' to="#footer">Contact</Link>
+                <StyledScrollLink
+                    className="ListItem"
+                    to="home"
+                    smooth={true}
+                    duration={500} // Smooth scroll duration
+                    spy={true}
+                    offset={-70} // Offset to account for fixed navbar
+                >
+                    Home
+                </StyledScrollLink>
+                <StyledScrollLink
+                    className="ListItem"
+                    to="about"
+                    smooth={true}
+                    duration={500}
+                    spy={true}
+                    offset={-70}
+                >
+                    About
+                </StyledScrollLink>
+                <StyledScrollLink
+                    className="ListItem"
+                    to="footer"
+                    smooth={true}
+                    duration={500}
+                    spy={true}
+                    offset={-70}
+                >
+                    Contact
+                </StyledScrollLink>
             </Menu>
-            <button onClick={logoutuser}>Log Out</button>
         </NavBar>
     );
 }
 
 export default connect(null, { logout })(Nav);
 
+// Styled Components
 
 const NavBar = styled.div`
-    margin-top: 0px;
-    padding-top: 5px;
-    padding-left: 20px;
-    padding-right: 50px;
+    padding: 15px 30px 15px 30px;
     display: flex;
-    justify-content: space-around; 
+    justify-content: space-between;
     align-items: center;
-    position: fixed;
     background-color: white;
+    color: black;
+    position: fixed;
     width: 100%;
+    top: 0;
     z-index: 100;
-    
-    .logo img {
-        height: 65px;
-    }
-    p{
-        font-size: 12px;
-        /* transform: translateX(-60px); */
-    }
-    button {
-        height: 32px;
-        margin: 15px;
-        width: 80px;
-        background-color: #3186b2;
-        border-radius: 2px;
-        border: none;
-        font-weight: 550;
-        color: #fcfcfc;
-        &:hover {
-            background-color: #fcfcfc;
-            color: #3186b2;
-            border: 1px solid black;
-            transition: ease-in 0.3s;
-            cursor: pointer;
-        }
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow to lift the navbar */
+`;
+
+const LogoContainer = styled.div`
+    display: flex;
+    align-items: center;
+
+    img {
+        height: 50px;
+        margin-right: 10px;
     }
 
-    @media (max-width: 600px) {
-        justify-content: space-around; 
+    p {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: black;
+        margin: 0;
+    }
+`;
+
+const Hamburger = styled.div`
+    font-size: 24px;
+    color: black;
+    cursor: pointer;
+    display: none;
+
+    @media (max-width: 768px) {
+        display: block;
     }
 `;
 
 const Menu = styled.ul`
     display: flex;
-    gap: 20px;
+    gap: 30px;
     list-style: none;
-
-    .ListItem {
-        text-decoration: none; 
-        color :black ;
-        font-size: 16px;
-        border-radius: 4px;
-        transition: background-color  0.3s ease, color 0.3s ease,transform 0.2s ease ;
-
-        &:hover {
-            color: #3186b2;
-            cursor: pointer;
-            transform: translateY(-3px);
-        }
-    }
-
-    @media (max-width: 600px) {
+    margin: 0;
+    transform: translateX(-80px);
+    @media (max-width: 768px) {
         position: absolute;
-        top: 70px;
+        top: 60px;
         right: ${({ isOpen }) => (isOpen ? "0" : "-100%")};
         flex-direction: column;
         background-color: white;
         width: 200px;
         height: 100vh;
-        transition: right 0.3s ease-in-out;
         padding: 2rem;
+        transition: right 0.3s ease-in-out;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         z-index: 99;
-
-        .ListItem {
-            margin-bottom: 20px;
-            font-size: 18px;
-            color: #000;
-            text-decoration: none;  
-        }
     }
 `;
 
+const StyledScrollLink = styled(ScrollLink)`
+    color: black;
+    font-size: 18px;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
 
-const Hamburger = styled.div`
-    display: none;
-    font-size: 24px;
-    cursor: pointer;
-
-    @media (max-width: 600px) {
-        display: block;
+    &:hover {
+        color: #3186b2;
+        background-color: #fcfcfc;
+        transform: translateY(-3px); /* Lifting effect on hover */
     }
-`;
 
-const LoginButton = styled.button`
-    @media (max-width: 600px) {
-        display: none;
+    @media (max-width: 768px) {
+        font-size: 20px;
+        margin-bottom: 20px;
     }
 `;

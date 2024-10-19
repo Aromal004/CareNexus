@@ -6,6 +6,7 @@ import styled from "styled-components";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  transform: translateY(80px);
   align-items: center;
   background-color: #f8f9fa;
   min-height: 100vh;
@@ -136,6 +137,11 @@ const FooterText = styled.p`
   font-size: 1rem;
 `;
 
+const MainC=styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
 function Home() {
   const navigate = useNavigate(); // useNavigate hook
 
@@ -144,18 +150,18 @@ function Home() {
   };
 
   return (
+   <MainC>
+    <Nav />
     <Container>
-      <Nav />
-
       {/* Hero Section */}
-      <HeroSection>
+      <HeroSection id="home">
         <HeroTitle>Welcome to CareNexus</HeroTitle>
         <HeroSubtitle>Efficient, Connected, and Secure Healthcare Operations</HeroSubtitle>
         <CTAButton onClick={handleGetStarted}>Get Started</CTAButton>
       </HeroSection>
 
       {/* Features Section */}
-      <FeaturesSection>
+      <FeaturesSection id="about">
         <FeaturesTitle>Key Features</FeaturesTitle>
         <FeaturesGrid>
           <FeatureCard>
@@ -202,10 +208,11 @@ function Home() {
       </TestimonialSection>
 
       {/* Footer */}
-      <Footer>
+      <Footer id="footer">
         <FooterText>© 2024 CareNexus. All rights reserved.</FooterText>
       </Footer>
     </Container>
+    </MainC>
   );
 }
 
