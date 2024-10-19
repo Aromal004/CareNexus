@@ -52,7 +52,13 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:8000/dashboard/')
+    fetch('http://localhost:8000/dashboard/', {
+      method: 'GET',
+      credentials: 'include',  // Ensures cookies (auth) are included in the request
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
       .then((response) => {
         if (response.ok) {
           return response.json();

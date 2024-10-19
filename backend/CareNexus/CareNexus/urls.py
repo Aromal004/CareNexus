@@ -14,7 +14,7 @@ urlpatterns = [
     path('user_info/', include('user_info.urls')),
     path('login/', custom_session_login_view, name='login'),   
     path('logout/', custom_session_logout_view, name='logout'),
-    path('dashboard/',display_user_info)  
+    path('dashboard/',display_user_info, name='dashboard')  
 ]
 
 
