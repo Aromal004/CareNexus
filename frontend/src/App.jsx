@@ -15,6 +15,10 @@ import Dashboard from './pages/Dashboard';
 import HospitalAdministration from './components/HospitalAdministration';
 import Doctor from './components/Doctor';
 import Patient from './components/Patient';
+import PatientDashboard from './components/PendingReq';
+import DoctorUpdateStats from './pages/DoctorUpdateStats';
+import AttendingReqDoc from './components/SentRequest';
+import DoctorDashboard from './pages/DoctorDashboard';
 
 function App() {
 
@@ -36,6 +40,11 @@ function App() {
               <Route path='/user_info/Patient-Details' element={<Patient />} />
               <Route path='/user_info/Doctor-Details' element={<Doctor />} />
               <Route path='/user_info/HospitalAdmin-Details' element={<HospitalAdministration />} />
+              <Route path='/attending/doctor-dashboard' element={<AttendingReqDoc />} />
+              <Route path='/attending/Patient-dashboard' element={<PatientDashboard />} />
+              {/* <Route path='/attending/Doc-Update-stats' element={<DoctorUpdateStats />} /> */}
+              <Route path='/Doctor-Dashboard' element={<DoctorDashboard />} />
+              <Route path="/attending/update-stats/:requestId" element={<DoctorUpdateStats />} />
             </Routes>
           </Layout>
       </Router>

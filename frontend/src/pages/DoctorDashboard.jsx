@@ -7,7 +7,7 @@ import { logout } from '../actions/auth';
 import Profile from '../components/Profile';
 import Stats from '../components/Stats';
 import PatientDashboard from '../components/PendingReq';
-import AttendingRequests from '../components/PendingReq';
+import AttendingReqDoc from '../components/SentRequest';
 
 const Sidebar = ({ logout }) => {
     const [activeComponent, setActiveComponent] = useState('stats');  // By default, Stats is active
@@ -22,8 +22,8 @@ const Sidebar = ({ logout }) => {
         switch (activeComponent) {
             case 'profile':
                 return <Profile />;
-            case 'Pending Request':
-                return <AttendingRequests />;
+            case 'Sent Request':
+                return <AttendingReqDoc />;
             // case 'download':
             //     return <Download />;
             default:
@@ -44,8 +44,8 @@ const Sidebar = ({ logout }) => {
                     <MenuItem onClick={() => setActiveComponent('download')}>
                         <FaDownload /> Download
                     </MenuItem>
-                    <MenuItem onClick={() => setActiveComponent('Pending Request')}>
-                        <FaDownload /> Pending Requests
+                    <MenuItem onClick={() => setActiveComponent('Sent Request')}>
+                        <FaDownload /> Sent Request
                     </MenuItem>
                 </SidebarMenu>
 

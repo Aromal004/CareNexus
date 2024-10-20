@@ -37,7 +37,7 @@ const Doctor = () => {
       // Handle successful response
       if (response.data.status === 'success') {
         alert('Doctor info saved successfully!');
-        navigate('/landingpage');  // Redirect to home after successful form submission
+        navigate('/Doctor-Dashboard');  // Redirect to home after successful form submission
       }
     } catch (error) {
       // Handle errors (e.g., network issues or backend validation errors)
