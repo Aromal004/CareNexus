@@ -85,7 +85,9 @@ function AcceptedRequests() {
         const data = await response.json();
         
         if (response.ok) {
-          setAcceptedRequests(data.requests);
+          // Sort requests by request_time in descending order
+          const sortedRequests = data.requests.sort((a, b) => new Date(b.request_time) - new Date(a.request_time));
+          setAcceptedRequests(sortedRequests);
         } else {
           setMessage(data.message || 'Error fetching requests');
         }

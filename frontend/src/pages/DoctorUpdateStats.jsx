@@ -1,10 +1,65 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom'; // To get route parameters
+import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
+import styled from 'styled-components'; // Import styled-components
+
+// Styled components
+const Container = styled.div`
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+`;
+
+const Title = styled.h1`
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
+const TextArea = styled.textarea`
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
+const UpdateButton = styled.button`
+  padding: 10px 20px;
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover {
+    background-color: #0052a3;
+  }
+`;
+
+const Message = styled.p`
+  text-align: center;
+  color: #666;
+  margin: 20px 0;
+`;
+
+const LoadingSpinner = styled.div`
+  text-align: center;
+  color: #666;
+  margin: 20px 0;
+`;
 
 function DoctorUpdateStats() {
   // Get requestId from route parameters
   const { requestId } = useParams();  // Extract requestId from URL
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const [bloodPressure, setBloodPressure] = useState('');
   const [heartRate, setHeartRate] = useState('');
@@ -36,35 +91,38 @@ function DoctorUpdateStats() {
         heart_rate: heartRate,
         other_notes: otherNotes,
       });
-      setMessage(response.data.message);
+      alert(response.data.message);
+
+      // Navigate to the doctor dashboard after successful update
+      navigate('/doctor-dashboard'); // Change this to the correct path for the dashboard
     } catch (error) {
       setMessage(error.response?.data?.message || 'Error updating stats');
     }
   };
 
   return (
-    <div>
-      <h1>Update Patient Stats</h1>
-      <input
+    <Container>
+      <Title>Update Patient Stats</Title>
+      <Input
         type="text"
         value={bloodPressure}
         onChange={(e) => setBloodPressure(e.target.value)}
         placeholder="Blood Pressure"
       />
-      <input
+      <Input
         type="number"
         value={heartRate}
         onChange={(e) => setHeartRate(e.target.value)}
         placeholder="Heart Rate"
       />
-      <textarea
+      <TextArea
         value={otherNotes}
         onChange={(e) => setOtherNotes(e.target.value)}
         placeholder="Other Notes"
-      ></textarea>
-      <button onClick={handleUpdateStats}>Update Stats</button>
-      {message && <p>{message}</p>}
-    </div>
+      ></TextArea>
+      <UpdateButton onClick={handleUpdateStats}>Update Stats</UpdateButton>
+      {message && <Message>{message}</Message>}
+    </Container>
   );
 }
 

@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { logout } from '../actions/auth';
 import Profile from '../components/Profile';
 import Stats from '../components/Stats';
-import PatientDashboard from '../components/PendingReq';
 import AttendingReqDoc from '../components/SentRequest';
+import AcceptedRequests from '../components/AcceptedRequests';
 
 const Sidebar = ({ logout }) => {
     const [activeComponent, setActiveComponent] = useState('stats');  // By default, Stats is active
@@ -24,8 +24,8 @@ const Sidebar = ({ logout }) => {
                 return <Profile />;
             case 'Sent Request':
                 return <AttendingReqDoc />;
-            // case 'download':
-            //     return <Download />;
+            case 'Accepted Requests':
+                return <AcceptedRequests/>
             default:
                 return <Stats />;
         }
@@ -46,6 +46,9 @@ const Sidebar = ({ logout }) => {
                     </MenuItem>
                     <MenuItem onClick={() => setActiveComponent('Sent Request')}>
                         <FaDownload /> Sent Request
+                    </MenuItem>
+                    <MenuItem onClick={() => setActiveComponent('Accepted Requests')}>
+                        <FaDownload /> Accepted Requests
                     </MenuItem>
                 </SidebarMenu>
 
