@@ -40,6 +40,10 @@ const DoctorName = styled.p`
   color: #444;
 `;
 
+const ButtonGroup=styled.div`
+display: flex;
+  gap:10px;
+`
 const ResponseButton = styled.button`
   padding: 10px 15px;
   background-color: #0066cc;
@@ -101,10 +105,10 @@ function AttendingRequests() {
             <DoctorInfo>
               <DoctorName>Request from {request.doctor_name}</DoctorName>
             </DoctorInfo>
-            <div>
+            <ButtonGroup>
               <ResponseButton onClick={() => handleRespond(request.id, 'accept')}>Accept</ResponseButton>
               <ResponseButton onClick={() => handleRespond(request.id, 'reject')}>Reject</ResponseButton>
-            </div>
+            </ButtonGroup>
           </RequestCard>
         ))
       ) : (
