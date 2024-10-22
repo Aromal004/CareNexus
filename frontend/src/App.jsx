@@ -19,6 +19,7 @@ import PatientDashboard from './components/PendingReq';
 import DoctorUpdateStats from './pages/DoctorUpdateStats';
 import AttendingReqDoc from './components/SentRequest';
 import DoctorDashboard from './pages/DoctorDashboard';
+import AcceptedRequests from './components/AcceptedRequests';
 
 function App() {
 
@@ -42,7 +43,7 @@ function App() {
               <Route path='/user_info/HospitalAdmin-Details' element={<HospitalAdministration />} />
               <Route path='/attending/doctor-dashboard' element={<AttendingReqDoc />} />
               <Route path='/attending/Patient-dashboard' element={<PatientDashboard />} />
-              {/* <Route path='/attending/Doc-Update-stats' element={<DoctorUpdateStats />} /> */}
+              <Route path="/attending/accepted-requests" element={<AcceptedRequests />} />              
               <Route path='/Doctor-Dashboard' element={<DoctorDashboard />} />
               <Route path="/attending/update-stats/:requestId" element={<DoctorUpdateStats />} />
             </Routes>

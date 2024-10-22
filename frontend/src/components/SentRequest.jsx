@@ -1,3 +1,4 @@
+// SentRequest.jsx (AttendingReqDoc)
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +20,6 @@ function AttendingReqDoc() {
   useEffect(() => {
     const fetchCSRFToken = async () => {
       try {
-        // Get CSRF token from Django endpoint
         await axios.get('http://localhost:8000/get-csrf-token/');
       } catch (error) {
         console.error('Error fetching CSRF token:', error);
@@ -31,7 +31,6 @@ function AttendingReqDoc() {
   const handleSendRequest = async () => {
     try {
       const token = localStorage.getItem('token');
-      
       const response = await axios.post(
         'http://localhost:8000/attending/send-request/', 
         { patient_email: patientEmail },
@@ -45,6 +44,7 @@ function AttendingReqDoc() {
       setMessage(response.data.message);
       setRequestId(response.data.request_id);
       setIsPolling(true);
+      setPatientEmail('');  // Clear the email field upon success
     } catch (error) {
       setMessage(error.response?.data?.message || 'Error sending request');
       console.error('Request error:', error);
@@ -84,26 +84,17 @@ function AttendingReqDoc() {
   }, [isPolling, requestId, navigate]);
 
   return (
-    <div >
-      <h1 >Send Request to Patient</h1>
-      <div >
+    <div>
+      <h1>Send Request to Patient</h1>
+      <div>
         <input
           type="email"
           value={patientEmail}
           onChange={(e) => setPatientEmail(e.target.value)}
           placeholder="Enter patient email"
         />
-        <button
-          onClick={handleSendRequest}
-          
-        >
-          Send Request
-        </button>
-        {message && (
-          <p >
-            {message}
-          </p>
-        )}
+        <button onClick={handleSendRequest}>Send Request</button>
+        {message && <p>{message}</p>}
       </div>
     </div>
   );

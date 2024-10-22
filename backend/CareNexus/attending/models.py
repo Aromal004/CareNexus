@@ -23,7 +23,7 @@ class PatientStats(models.Model):
     request = models.OneToOneField(AttendanceRequest, on_delete=models.CASCADE)
     blood_pressure = models.CharField(max_length=50)
     heart_rate = models.IntegerField()
-    other_notes = models.TextField()
+    other_notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"Stats for {self.request.patient.user.name} (attended by {self.request.doctor.user.name})"

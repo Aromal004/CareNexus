@@ -75,25 +75,59 @@ def patient_respond_to_request(request, request_id):
 
 @require_http_methods(["POST"])
 def doctor_update_patient_stats(request, request_id):
-    doctor = get_object_or_404(DoctorInfo, user=request.user)
-    attendance_request = get_object_or_404(AttendanceRequest, id=request_id, doctor=doctor)
+    try:
+        doctor = DoctorInfo.objects.filter(user=request.user).first()
+        if not doctor:
+            return JsonResponse({'message': 'Doctor not found'}, status=404)
 
-    if attendance_request.status != 'accepted':
-        return JsonResponse({'message': 'Request not accepted by patient'}, status=403)
+        attendance_request = get_object_or_404(AttendanceRequest, id=request_id, doctor=doctor)
 
-    # Get the patient stats from request
-    blood_pressure = request.POST.get('blood_pressure')
-    heart_rate = request.POST.get('heart_rate')
-    other_notes = request.POST.get('other_notes')
+        if attendance_request.status != 'accepted':
+            return JsonResponse({'message': 'Request not accepted by patient'}, status=403)
 
-    # Create or update patient stats
-    stats, created = PatientStats.objects.get_or_create(request=attendance_request)
-    stats.blood_pressure = blood_pressure
-    stats.heart_rate = heart_rate
-    stats.other_notes = other_notes
-    stats.save()
+        # Parse JSON data
+        data = json.loads(request.body)
+        
+        # Validate required fields
+        blood_pressure = data.get('blood_pressure')
+        heart_rate = data.get('heart_rate')
+        other_notes = data.get('other_notes', '')  # Optional field
+        
+        # Explicit validation
+        if not blood_pressure:
+            return JsonResponse({'message': 'Blood pressure is required'}, status=400)
+            
+        try:
+            # Convert heart_rate to integer and validate
+            heart_rate = int(heart_rate)
+            if heart_rate <= 0:
+                return JsonResponse({'message': 'Heart rate must be a positive number'}, status=400)
+        except (TypeError, ValueError):
+            return JsonResponse({'message': 'Heart rate must be a valid number'}, status=400)
 
-    return JsonResponse({'message': 'Patient stats updated successfully'})
+        # Create or update patient stats
+        stats, created = PatientStats.objects.get_or_create(
+            request=attendance_request,
+            defaults={
+                'blood_pressure': blood_pressure,
+                'heart_rate': heart_rate,
+                'other_notes': other_notes
+            }
+        )
+        
+        if not created:
+            stats.blood_pressure = blood_pressure
+            stats.heart_rate = heart_rate
+            stats.other_notes = other_notes
+            stats.save()
+
+        return JsonResponse({'message': 'Patient stats updated successfully'})
+        
+    except json.JSONDecodeError:
+        return JsonResponse({'message': 'Invalid JSON data'}, status=400)
+    except Exception as e:
+        print(f"Error in doctor_update_patient_stats: {str(e)}")  # Log the error
+        return JsonResponse({'message': f'Error updating stats: {str(e)}'}, status=500)
 
 
 
@@ -101,3 +135,39 @@ def doctor_update_patient_stats(request, request_id):
 def get_request_status(request, request_id):
     attendance_request = get_object_or_404(AttendanceRequest, id=request_id, doctor__user=request.user)
     return JsonResponse({'status': attendance_request.status})
+
+
+
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_http_methods
+from .models import AttendanceRequest, DoctorInfo
+
+@require_http_methods(["GET"])
+def get_accepted_requests(request):
+    """Fetch all accepted attendance requests for the current doctor."""
+    # Fetch all DoctorInfo records for the current logged-in user
+    doctor_list = DoctorInfo.objects.filter(user=request.user)
+    
+    if not doctor_list.exists():
+        return JsonResponse({'message': 'No doctor information found for the user'}, status=404)
+
+    # Fetch all attendance requests for the doctors associated with this user
+    accepted_requests = AttendanceRequest.objects.filter(
+        doctor__in=doctor_list, status='accepted'
+    )
+
+    # Prepare the response data
+    requests_data = [
+        {
+            'id': req.id,
+            'patient_name': req.patient.user.name,
+            # 'patient_email': req.patient.user.email,  # Optionally include the patient's email
+            'status': req.status,
+            'request_time': req.request_time.strftime('%Y-%m-%d %H:%M'),  # Include request time
+        }
+        for req in accepted_requests
+    ]
+
+    return JsonResponse({'requests': requests_data})
+
