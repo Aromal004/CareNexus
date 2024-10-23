@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import User_chk from '../components/user_chk';
 import { useNavigate } from 'react-router-dom';
+import User_chk from '../components/User_chk';
 
 
 function SecondPage() {
