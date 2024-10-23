@@ -11,15 +11,16 @@ import ReqResetPass from './pages/ReqResetPass';
 import Resetpass from './pages/Resetpass';
 import Activate from './pages/Activate';
 import LandingPage from './pages/LandingPage';
-import Dashboard from './pages/Dashboard';
 import HospitalAdministration from './components/HospitalAdministration';
 import Doctor from './components/Doctor';
 import Patient from './components/Patient';
-import PatientDashboard from './components/PendingReq';
 import DoctorUpdateStats from './pages/DoctorUpdateStats';
 import AttendingReqDoc from './components/SentRequest';
 import DoctorDashboard from './pages/DoctorDashboard';
 import AcceptedRequests from './components/AcceptedRequests';
+import SelectUser from './components/SelectUser';
+import Dashboard from './pages/Dashboard';
+import PatientDashboard from './pages/PatientDashboard';
 
 function App() {
 
@@ -36,15 +37,17 @@ function App() {
               <Route exact path='/password/reset/confirm/:uid/:token' element={<Resetpass />} />
               <Route exact path='/activate/:uid/:token' element={<Activate />} />
               <Route path='/secondpage' element={<SecondPage />} />
+              <Route path='/Select-user' element={<SelectUser />} />
               <Route path="/landingpage" element={<LandingPage />} /> 
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/patient-dashboard" element={<PatientDashboard />} />
+              <Route path='/Doctor-Dashboard' element={<DoctorDashboard />} />
               <Route path='/user_info/Patient-Details' element={<Patient />} />
               <Route path='/user_info/Doctor-Details' element={<Doctor />} />
               <Route path='/user_info/HospitalAdmin-Details' element={<HospitalAdministration />} />
               <Route path='/attending/doctor-dashboard' element={<AttendingReqDoc />} />
               <Route path='/attending/Patient-dashboard' element={<PatientDashboard />} />
-              <Route path="/attending/accepted-requests" element={<AcceptedRequests />} />              
-              <Route path='/Doctor-Dashboard' element={<DoctorDashboard />} />
+              <Route path="/attending/accepted-requests" element={<AcceptedRequests />} />                            
               <Route path="/attending/update-stats/:requestId" element={<DoctorUpdateStats />} />
             </Routes>
           </Layout>

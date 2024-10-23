@@ -6,10 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import { logout } from '../actions/auth';
 import Profile from '../components/Profile';
 import Stats from '../components/Stats';
-import AttendingReqDoc from '../components/SentRequest';
-import AcceptedRequests from '../components/AcceptedRequests';
+import AttendingRequests from '../components/PendingReq';
 
-const DoctorDashboard = ({ logout }) => {
+const PatientDashboard = ({ logout }) => {
     const [activeComponent, setActiveComponent] = useState('stats');  // By default, Stats is active
     const navigate = useNavigate();
 
@@ -22,10 +21,10 @@ const DoctorDashboard = ({ logout }) => {
         switch (activeComponent) {
             case 'profile':
                 return <Profile />;
-            case 'Sent Request':
-                return <AttendingReqDoc />;
-            case 'Accepted Requests':
-                return <AcceptedRequests/>
+            case 'Pending Request':
+                return <AttendingRequests />;
+            // case 'download':
+            //     return <Download />;
             default:
                 return <Stats />;
         }
@@ -44,11 +43,8 @@ const DoctorDashboard = ({ logout }) => {
                     <MenuItem onClick={() => setActiveComponent('download')}>
                         <FaDownload /> Download
                     </MenuItem>
-                    <MenuItem onClick={() => setActiveComponent('Sent Request')}>
-                        <FaDownload /> Sent Request
-                    </MenuItem>
-                    <MenuItem onClick={() => setActiveComponent('Accepted Requests')}>
-                        <FaDownload /> Accepted Requests
+                    <MenuItem onClick={() => setActiveComponent('Pending Request')}>
+                        <FaDownload /> Pending Requests
                     </MenuItem>
                 </SidebarMenu>
 
@@ -64,7 +60,7 @@ const DoctorDashboard = ({ logout }) => {
     );
 };
 
-export default connect(null, { logout })(DoctorDashboard);
+export default connect(null, { logout })(PatientDashboard);
 
 const Container = styled.div`
     display: flex;

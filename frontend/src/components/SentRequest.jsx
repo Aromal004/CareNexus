@@ -4,101 +4,135 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import styled from 'styled-components';
 
-// Configure axios defaults for CSRF
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.withCredentials = true;  // Important for CSRF
-
 // Styled Components
 const Container = styled.div`
-  max-width: 800px;
-  margin: 40px auto;
+  max-width: 500px;
+  margin: 0 auto;
   padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const Title = styled.h1`
-  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
   color: #333;
-  margin-bottom: 30px;
 `;
 
-const InputWrapper = styled.div`
+const Form = styled.form`
   display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 const Input = styled.input`
-  padding: 10px;
   width: 100%;
-  max-width: 400px;
-  font-size: 16px;
-  border: 1px solid #ddd;
+  padding: 10px;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  margin-right: 10px;
+  font-size: 16px;
+
+  &:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+  }
+
+  &:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+  }
 `;
 
 const Button = styled.button`
-  padding: 10px 20px;
-  background-color: #0066cc;
+  width: 100%;
+  padding: 12px;
+  background-color: #4a90e2;
   color: white;
   border: none;
   border-radius: 4px;
+  font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  &:hover {
-    background-color: #0052a3;
+  transition: background-color 0.2s;
+
+  &:hover:not(:disabled) {
+    background-color: #357abd;
+  }
+
+  &:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
   }
 `;
 
 const Message = styled.p`
-  text-align: center;
-  color: ${props => (props.error ? 'red' : '#666')};
-  margin-top: 20px;
+  font-size: 14px;
+  margin-top: 10px;
+  color: ${props => props.isError ? '#dc3545' : '#28a745'};
 `;
+
+// Create axios instance with default config
+const api = axios.create({
+  baseURL: 'http://localhost:8000',
+  withCredentials: true,  // Important for CSRF and session cookies
+  xsrfCookieName: 'csrftoken',
+  xsrfHeaderName: 'X-CSRFToken',
+});
 
 function AttendingReqDoc() {
   const [patientEmail, setPatientEmail] = useState('');
   const [message, setMessage] = useState('');
   const [requestId, setRequestId] = useState(null);
   const [isPolling, setIsPolling] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Fetch CSRF token on component mount
+  // Initialize CSRF protection
   useEffect(() => {
-    const fetchCSRFToken = async () => {
+    const initializeCSRF = async () => {
       try {
-        await axios.get('http://localhost:8000/get-csrf-token/');
+        // First make a GET request to get the CSRF cookie
+        await api.get('/get-csrf-token/');
+        
+        // Then get the token from cookies and set it in axios defaults
+        const csrfToken = Cookies.get('csrftoken');
+        if (csrfToken) {
+          api.defaults.headers.common['X-CSRFToken'] = csrfToken;
+        }
       } catch (error) {
-        console.error('Error fetching CSRF token:', error);
+        console.error('Error initializing CSRF:', error);
+        setMessage('Error initializing security. Please refresh the page.');
       }
     };
-    fetchCSRFToken();
+
+    initializeCSRF();
   }, []);
 
-  const handleSendRequest = async () => {
+  const handleSendRequest = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(
-        'http://localhost:8000/attending/send-request/',
+      const response = await api.post(
+        '/attending/send-request/', 
         { patient_email: patientEmail },
         {
           headers: {
-            Authorization: token ? `Bearer ${token}` : undefined,
-          },
+            'Authorization': token ? `Bearer ${token}` : '',
+          }
         }
       );
-
+      
       setMessage(response.data.message);
       setRequestId(response.data.request_id);
       setIsPolling(true);
-      setPatientEmail(''); // Clear the email field upon success
+      setPatientEmail('');
     } catch (error) {
-      setMessage(error.response?.data?.message || 'Error sending request');
+      const errorMsg = error.response?.data?.message || 'Error sending request';
+      setMessage(errorMsg);
       console.error('Request error:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -109,44 +143,54 @@ function AttendingReqDoc() {
       interval = setInterval(async () => {
         try {
           const token = localStorage.getItem('token');
-          const response = await axios.get(
-            `http://localhost:8000/attending/request-status/${requestId}/`,
+          const response = await api.get(
+            `/attending/request-status/${requestId}/`,
             {
               headers: {
-                Authorization: token ? `Bearer ${token}` : undefined,
-              },
+                'Authorization': token ? `Bearer ${token}` : '',
+              }
             }
           );
-
+          
           if (response.data.status === 'accepted') {
             setMessage('Request accepted. Redirecting to update stats...');
             setIsPolling(false);
-            clearInterval(interval);
             navigate(`/attending/update-stats/${requestId}`);
           }
         } catch (error) {
           setMessage('Error checking request status');
           console.error('Polling error:', error);
+          setIsPolling(false); // Stop polling on error
         }
       }, 5000);
     }
 
-    return () => clearInterval(interval);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
   }, [isPolling, requestId, navigate]);
 
   return (
     <Container>
       <Title>Send Request to Patient</Title>
-      <InputWrapper>
+      <Form onSubmit={handleSendRequest}>
         <Input
           type="email"
           value={patientEmail}
           onChange={(e) => setPatientEmail(e.target.value)}
           placeholder="Enter patient email"
+          required
+          disabled={isLoading}
         />
-        <Button onClick={handleSendRequest}>Send Request</Button>
-      </InputWrapper>
-      {message && <Message error={message.includes('Error')}>{message}</Message>}
+        <Button type="submit" disabled={isLoading || !patientEmail}>
+          {isLoading ? 'Sending...' : 'Send Request'}
+        </Button>
+        {message && (
+          <Message isError={message.includes('Error')}>
+            {message}
+          </Message>
+        )}
+      </Form>
     </Container>
   );
 }

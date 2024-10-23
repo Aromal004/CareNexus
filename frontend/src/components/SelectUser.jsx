@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
-const User_chk = ({ onSelectRole }) => {
+const SelectUser = () => {
+    const navigate = useNavigate();
   const handleClick = (role) => {
     localStorage.setItem('role', role);
     console.log(`Selected role: ${role}`);
-    onSelectRole(role);
+    navigate('/dashboard')
   };
 
   return (
@@ -14,9 +16,6 @@ const User_chk = ({ onSelectRole }) => {
         <h1>Select User</h1>
         <StyledButton onClick={() => handleClick('Patient')}>Patient</StyledButton>
         <StyledButton onClick={() => handleClick('Doctor')}>Doctor</StyledButton>
-        <StyledButton onClick={() => handleClick('Hospital Administration')}>
-          Hospital Administration
-        </StyledButton>
       </Container>
     </BoxContainer>
   );
@@ -64,4 +63,4 @@ const StyledButton = styled.button`
   }
 `;
 
-export default User_chk;
+export default SelectUser;
