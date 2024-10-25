@@ -7,9 +7,9 @@ import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../actions/auth';
 import Profile from '../components/Profile';
-import Stats from '../components/Stats';
 import AttendingReqDoc from '../components/SentRequest';
 import AcceptedRequests from '../components/AcceptedRequests';
+import DoctorStats from '../components/DoctorStats';
 
 const DoctorDashboard = ({ logout }) => {
     const [activeComponent, setActiveComponent] = useState('stats');  // By default, Stats is active
@@ -29,7 +29,7 @@ const DoctorDashboard = ({ logout }) => {
             case 'Accepted Requests':
                 return <AcceptedRequests/>
             default:
-                return <Stats />;
+                return <DoctorStats />;
         }
     };
 

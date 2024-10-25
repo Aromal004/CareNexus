@@ -9,4 +9,5 @@ urlpatterns = [
     path('pending-requests/', views.get_pending_requests, name='get_pending_requests'),
     path('accepted-requests/', views.get_accepted_requests, name='get_accepted_requests'),
     path('patient-stats/', views.get_patient_stats, name='patient-stats'),
+    path('doctor-stats/', views.doctor_stats_view, name='doctor-stats'),
 ]

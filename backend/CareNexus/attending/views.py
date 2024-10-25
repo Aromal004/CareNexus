@@ -207,3 +207,40 @@ def get_patient_stats(request):
         return JsonResponse({'stats': stats_data})
     except PatientInfo.DoesNotExist:
         return JsonResponse({'error': 'Patient information not found'}, status=404)
+    
+
+@login_required
+def doctor_stats_view(request):
+    # Find the DoctorInfo associated with the logged-in user
+    try:
+        doctor = DoctorInfo.objects.get(user=request.user)
+    except DoctorInfo.DoesNotExist:
+        return JsonResponse({'error': 'Doctor profile not found for this user.'}, status=404)
+    
+    # Gather accepted AttendanceRequests related to this doctor
+    attendance_requests = AttendanceRequest.objects.filter(doctor=doctor, status='accepted')
+    
+    patients = []
+    for request in attendance_requests:
+        try:
+            stats = PatientStats.objects.get(request=request)
+            patients.append({
+                'patient_name': request.patient.user.name,
+                'age': request.patient.age,
+                'medical_condition': request.patient.medical_condition,
+                'blood_pressure': stats.blood_pressure,
+                'heart_rate': stats.heart_rate,
+                'other_notes': stats.other_notes,
+            })
+        except PatientStats.DoesNotExist:
+            continue
+
+    # Return doctor details along with treated patient stats
+    data = {
+        'doctor_name': doctor.user.name,
+        'speciality': doctor.speciality,
+        'hospital': doctor.hospital,
+        'patients': patients,
+    }
+
+    return JsonResponse(data)    
