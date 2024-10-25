@@ -30,79 +30,33 @@ const ErrorMessage = styled.p`
   color: #f56565;
 `;
 
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 `;
 
-const StyledCard = styled.div`
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-`;
-
-const CardHeader = styled.div`
-  padding: 16px;
-  border-bottom: 1px solid #e2e8f0;
+const TableHeader = styled.th`
+  padding: 12px;
+  text-align: left;
   background-color: #f7fafc;
+  border-bottom: 2px solid #e2e8f0;
 `;
 
-const DoctorName = styled.h2`
-  font-size: 1.125rem;
-  font-weight: bold;
-  margin: 0;
+const TableRow = styled.tr`
+  &:nth-child(even) {
+    background-color: #f9fafb;
+  }
 `;
 
-const Hospital = styled.p`
+const TableCell = styled.td`
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
   font-size: 0.875rem;
-  color: #718096;
-  margin: 0;
-`;
-
-const CardContent = styled.div`
-  padding: 16px;
-`;
-
-const StatRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-`;
-
-const StatLabel = styled.span`
-  font-weight: 500;
-`;
-
-const StatValue = styled.span`
-  font-weight: normal;
-`;
-
-const Notes = styled.div`
-  margin-top: 16px;
-`;
-
-const NoteLabel = styled.p`
-  font-weight: 500;
 `;
 
 const NoteText = styled.p`
   color: #718096;
-`;
-
-const UpdateInfo = styled.div`
-  font-size: 0.875rem;
-  color: #718096;
-  margin-top: 16px;
 `;
 
 const PatientStats = () => {
@@ -121,7 +75,11 @@ const PatientStats = () => {
           }
         });
         const data = await response.json();
-        setStats(data.stats || []);
+        
+        // Sort stats by date descending (assuming date format is YYYY-MM-DD)
+        const sortedStats = (data.stats || []).sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        setStats(sortedStats);
         setError(null);
       } catch (err) {
         setError('An error occurred while fetching stats');
@@ -157,37 +115,32 @@ const PatientStats = () => {
       {!stats || stats.length === 0 ? (
         <Message>No statistics available yet.</Message>
       ) : (
-        <Grid>
-          {stats.map((stat, index) => (
-            <StyledCard key={`${stat.doctor_name}-${stat.date}-${index}`}>
-              <CardHeader>
-                <DoctorName>Dr. {stat.doctor_name}</DoctorName>
-                <Hospital>{stat.hospital}</Hospital>
-              </CardHeader>
-              <CardContent>
-                <div>
-                  <StatRow>
-                    <StatLabel>Blood Pressure:</StatLabel>
-                    <StatValue>{stat.blood_pressure}</StatValue>
-                  </StatRow>
-                  <StatRow>
-                    <StatLabel>Heart Rate:</StatLabel>
-                    <StatValue>{stat.heart_rate} BPM</StatValue>
-                  </StatRow>
-                  {stat.other_notes && (
-                    <Notes>
-                      <NoteLabel>Notes:</NoteLabel>
-                      <NoteText>{stat.other_notes}</NoteText>
-                    </Notes>
-                  )}
-                  <UpdateInfo>
-                    Updated on {stat.date} at {stat.time}
-                  </UpdateInfo>
-                </div>
-              </CardContent>
-            </StyledCard>
-          ))}
-        </Grid>
+        <Table>
+          <thead>
+            <tr>
+              <TableHeader>Doctor</TableHeader>
+              <TableHeader>Hospital</TableHeader>
+              <TableHeader>Blood Pressure</TableHeader>
+              <TableHeader>Heart Rate</TableHeader>
+              <TableHeader>Notes</TableHeader>
+              <TableHeader>Updated On</TableHeader>
+            </tr>
+          </thead>
+          <tbody>
+            {stats.map((stat, index) => (
+              <TableRow key={`${stat.doctor_name}-${stat.date}-${index}`}>
+                <TableCell>Dr. {stat.doctor_name}</TableCell>
+                <TableCell>{stat.hospital}</TableCell>
+                <TableCell>{stat.blood_pressure}</TableCell>
+                <TableCell>{stat.heart_rate} BPM</TableCell>
+                <TableCell>
+                  {stat.other_notes ? <NoteText>{stat.other_notes}</NoteText> : '—'}
+                </TableCell>
+                <TableCell>{stat.date} at {stat.time}</TableCell>
+              </TableRow>
+            ))}
+          </tbody>
+        </Table>
       )}
     </Container>
   );

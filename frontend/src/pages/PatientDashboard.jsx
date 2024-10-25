@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FaUser, FaChartBar, FaDownload, FaSignOutAlt } from 'react-icons/fa';
+import { MdOutlinePendingActions } from "react-icons/md";
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../actions/auth';
@@ -44,7 +45,7 @@ const PatientDashboard = ({ logout }) => {
                         <FaDownload /> Download
                     </MenuItem>
                     <MenuItem onClick={() => setActiveComponent('Pending Request')}>
-                        <FaDownload /> Pending Requests
+                        <MdOutlinePendingActions /> Pending Requests
                     </MenuItem>
                 </SidebarMenu>
 

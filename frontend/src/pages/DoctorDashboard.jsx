@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { FaUser, FaChartBar, FaDownload, FaSignOutAlt } from 'react-icons/fa';
+import { TiArrowForwardOutline } from "react-icons/ti";
+import { FcAcceptDatabase } from "react-icons/fc";
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../actions/auth';
@@ -45,10 +47,10 @@ const DoctorDashboard = ({ logout }) => {
                         <FaDownload /> Download
                     </MenuItem>
                     <MenuItem onClick={() => setActiveComponent('Sent Request')}>
-                        <FaDownload /> Sent Request
+                        <TiArrowForwardOutline fontSize='24px'/> Sent Request
                     </MenuItem>
                     <MenuItem onClick={() => setActiveComponent('Accepted Requests')}>
-                        <FaDownload /> Accepted Requests
+                        <FcAcceptDatabase fontSize='24px'/> Accepted Requests
                     </MenuItem>
                 </SidebarMenu>
 
