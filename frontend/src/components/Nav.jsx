@@ -22,7 +22,7 @@ function Nav({ logout }) {
     return (
         <NavBar>
             <LogoContainer>
-                <img src="images/ACM logo.png" alt="logo" />
+                {/* <img src="images/ACM logo.png" alt="logo" /> */}
                 <p>CareNexus</p>
             </LogoContainer>
             <Hamburger onClick={toggleMenu}>
