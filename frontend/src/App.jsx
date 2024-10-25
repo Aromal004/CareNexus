@@ -21,6 +21,7 @@ import AcceptedRequests from './components/AcceptedRequests';
 import SelectUser from './components/SelectUser';
 import Dashboard from './pages/Dashboard';
 import PatientDashboard from './pages/PatientDashboard';
+import PatientStats from './components/Stats';
 
 function App() {
 
@@ -48,6 +49,7 @@ function App() {
               <Route path='/attending/doctor-dashboard' element={<AttendingReqDoc />} />
               <Route path='/attending/Patient-dashboard' element={<PatientDashboard />} />
               <Route path="/attending/accepted-requests" element={<AcceptedRequests />} />                            
+              <Route path="/attending/patient-stats" element={<PatientStats />} />                            
               <Route path="/attending/update-stats/:requestId" element={<DoctorUpdateStats />} />
             </Routes>
           </Layout>

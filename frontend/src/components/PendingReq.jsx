@@ -69,7 +69,7 @@ function AttendingRequests() {
 
   useEffect(() => {
     // Fetch pending requests
-    axios.get('http://localhost:8000/attending/pending-requests/')
+    axios.get('/attending/pending-requests/')
       .then(response => {
         setRequests(response.data.requests || []); // Safely handle undefined
       })

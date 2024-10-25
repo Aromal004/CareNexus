@@ -171,3 +171,39 @@ def get_accepted_requests(request):
 
     return JsonResponse({'requests': requests_data})
 
+
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from .models import PatientStats, AttendanceRequest
+from user_info.models import PatientInfo
+
+@login_required
+def get_patient_stats(request):
+    try:
+        # Get patient info for the logged-in user
+        patient = PatientInfo.objects.get(user=request.user)
+        
+        # Get all attendance requests for this patient
+        attendance_requests = AttendanceRequest.objects.filter(
+            patient=patient
+        ).select_related('doctor', 'doctor__user')
+        
+        stats_data = []
+        for req in attendance_requests:
+            try:
+                stats = PatientStats.objects.get(request=req)
+                stats_data.append({
+                    'doctor_name': req.doctor.user.name,
+                    'hospital': req.doctor.hospital,
+                    'blood_pressure': stats.blood_pressure,
+                    'heart_rate': stats.heart_rate,
+                    'other_notes': stats.other_notes,
+                    'date': req.request_time.strftime('%Y-%m-%d'),
+                    'time': req.request_time.strftime('%H:%M'),
+                })
+            except PatientStats.DoesNotExist:
+                continue
+                
+        return JsonResponse({'stats': stats_data})
+    except PatientInfo.DoesNotExist:
+        return JsonResponse({'error': 'Patient information not found'}, status=404)

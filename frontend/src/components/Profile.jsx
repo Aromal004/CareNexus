@@ -52,7 +52,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:8000/dashboard/', {
+    fetch('/dashboard/', {
       method: 'GET',
       credentials: 'include',  // Ensures cookies (auth) are included in the request
       headers: {
