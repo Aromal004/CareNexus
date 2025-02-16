@@ -26,7 +26,7 @@ const Doctor = () => {
       const csrfToken = Cookies.get('csrftoken'); // Get CSRF token from cookies
 
       // Make the POST request to Django backend
-      const response = await axios.post('http://localhost:8000/user_info/doctor-details/', data, {
+      const response = await axios.post('/user_info/doctor-details/', data, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `JWT ${localStorage.getItem('access')}`,  // Include JWT token for authentication

@@ -29,7 +29,7 @@ const Patient = () => {
 
       // Make the POST request to Django backend
       console.log(localStorage.getItem('access'));
-      const response = await axios.post('http://localhost:8000/user_info/Patient-Details/', data, {
+      const response = await axios.post('/user_info/Patient-Details/', data, {
         
         headers: {
           'Content-Type': 'application/json',
