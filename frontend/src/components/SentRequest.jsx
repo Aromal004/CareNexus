@@ -72,7 +72,7 @@ const Message = styled.p`
 
 // Create axios instance with default config
 const api = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: '',
   withCredentials: true,  // Important for CSRF and session cookies
   xsrfCookieName: 'csrftoken',
   xsrfHeaderName: 'X-CSRFToken',

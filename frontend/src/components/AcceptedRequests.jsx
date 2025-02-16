@@ -79,7 +79,7 @@ function AcceptedRequests() {
     const fetchAcceptedRequests = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:8000/attending/accepted-requests/', {
+        const response = await fetch('/attending/accepted-requests/', {
           credentials: 'include'
         });
         const data = await response.json();

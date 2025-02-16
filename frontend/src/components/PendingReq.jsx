@@ -81,7 +81,7 @@ function AttendingRequests() {
       // Get the CSRF token from cookies
       const csrfToken = Cookies.get('csrftoken'); // Now Cookies is defined
 
-      const response = await axios.post(`http://localhost:8000/attending/respond-request/${requestId}/`, 
+      const response = await axios.post(`/attending/respond-request/${requestId}/`, 
         { action },
         {
           headers: {

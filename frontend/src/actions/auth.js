@@ -175,7 +175,7 @@ export const logout = () => async dispatch => {
     // try {
     //     // Logout from session-based auth
     //     dispatch({ type: LOGOUT });
-    //     // await axios.post('http://localhost:8000/logout/');
+    //     // await axios.post('/logout/');
 
     //     // // Clear localStorage (JWT token and CSRF token)
     //     // localStorage.removeItem('access');
