@@ -71,12 +71,14 @@ const Message = styled.p`
 `;
 
 // Create axios instance with default config
+// Create axios instance with environment-based API URL
 const api = axios.create({
-  baseURL: '',
-  withCredentials: true,  // Important for CSRF and session cookies
+  baseURL: process.env.REACT_APP_API_URL,  // Use env variable
+  withCredentials: true,  
   xsrfCookieName: 'csrftoken',
   xsrfHeaderName: 'X-CSRFToken',
 });
+
 
 function AttendingReqDoc() {
   const [patientEmail, setPatientEmail] = useState('');
